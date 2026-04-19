@@ -3,7 +3,7 @@ import sound2 from './assets/sound-2.mp3';
 import sound3 from './assets/sound-3.mp3';
 import sound4 from './assets/sound-4.mp3';
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export const MemoryLightGame = () => {
     //--------------------------------Game State---------------------------------//
@@ -16,6 +16,13 @@ export const MemoryLightGame = () => {
     }
 
     const [gameState, setGameState] = useState(initialState);
+    const gameStateRef = useRef(null);
+    //----------------------------------------------------------------------------//
+
+    //--------------------------------Game State Reference for Timing---------------------------------//
+    useEffect(() => {
+        gameStateRef.current = gameState;
+    }, [gameState]);
     //----------------------------------------------------------------------------//
 
     //--------------------------------Button Functions---------------------------------//
@@ -47,15 +54,48 @@ export const MemoryLightGame = () => {
             return;
         }
     }
+
+    const strictBtnPressed = () => {
+        if (gameState.power === true && gameState.status === "on") {
+            setGameState(prev => ({
+                ...prev,
+                strictMode: !prev.strictMode
+            }));
+        } else {
+            return;
+        }
+    }
     //----------------------------------------------------------------------------//
 
+    //--------------------------Game Engine Functions--------------------------//
+    useEffect(() => {
+        if (gameState.status === "playing") {
+            sequencePlayback();
+        }
+    }, [gameState.status]);
+
+    const sequencePlayback = () => {
+        const sequence = gameStateRef.current.sequence;
+        const count = gameStateRef.current.count;
+
+        for (let i = 0; i < count; i++) {
+            console.log(sequence[i]);
+        }
+
+        setGameState(prev => ({
+            ...prev,
+            status: "input"
+        }));
+    }
+    
+    //----------------------------------------------------------------------------//   
     //--------------------------------Component Return---------------------------------//
     return (
         <>
             <p id="count-display">{gameState.status === "off" ? "" : `${gameState.count === 0 ? "--" : gameState.count}`}</p>
             <button id="power-btn" onClick={powerBtnPressed}>Power</button>
             <button id="start-btn" onClick={startBtnPressed}>Start</button>
-            <button id="strict-btn">Strict</button>
+            <button id="strict-btn" onClick={strictBtnPressed}>Strict</button>
 
             <div id="game-btns">
                 <button id="btn1"></button>
@@ -64,7 +104,7 @@ export const MemoryLightGame = () => {
                 <button id="btn4"></button>
             </div>
 
-            <button id="consoleLogState" onClick={() => console.log(gameState)}>Game State Check</button>
+            <button id="consoleLogState" onClick={() => { console.log(gameStateRef.current) }}>Game State Check</button>
         </>
     );
 }
