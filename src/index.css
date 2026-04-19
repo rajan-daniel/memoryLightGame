@@ -114,3 +114,19 @@ button {
   width: 100px;
   height: 100px;
 }
+
+#btn1 {
+  background-color: #517700;
+}
+
+#btn2 {
+  background-color: #7a002f;
+}
+
+#btn3 {
+  background-color: #7c7000;
+}
+
+#btn4 {
+  background-color: #005b80;
+}
