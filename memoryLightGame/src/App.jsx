@@ -1,7 +1,10 @@
+import { MemoryLightGame } from "./MemoryLightGame"
+
 function App() {
 
   return (
     <>
+      <MemoryLightGame />
     </>
   )
 }
