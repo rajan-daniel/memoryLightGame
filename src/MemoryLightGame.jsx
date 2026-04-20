@@ -11,6 +11,9 @@ export const MemoryLightGame = () => {
         power: false,
         strictMode: false,
         sequence: [],
+        inputSequence: [],
+        inputsNeeded: 0,
+        inputIndex: -1,
         count: 0,
         status: "off"
     }
@@ -41,13 +44,14 @@ export const MemoryLightGame = () => {
         }
     }
 
-    const startBtnPressed = () => {
+    const startRound = () => {
         if (gameState.power === false) {
             return;
         } else if (gameState.power === true) {
             setGameState(prev => ({
                 ...prev,
                 count: prev.count + 1,
+                inputIndex: -1,
                 status: "playing"
             }));
         } else {
@@ -68,6 +72,7 @@ export const MemoryLightGame = () => {
     //----------------------------------------------------------------------------//
 
     //--------------------------Game Engine Functions--------------------------//
+    //------------------BLOCKED ENGINE FUNCTION SHOULD LOOK LIKE------------------------///
     useEffect(() => {
         if (gameState.status === "playing") {
             sequencePlayback();
@@ -84,24 +89,66 @@ export const MemoryLightGame = () => {
 
         setGameState(prev => ({
             ...prev,
+            inputSequence: [],
+            inputsNeeded: count,
             status: "input"
         }));
     }
-    
+    //----------------------------------------------------------------------------//
+    useEffect(() => {
+        if (gameState.status === "input") {
+            console.log("Input Phase Ready!")
+        }
+    }, [gameState.status]);
+
+    const playerInput = (btn) => {
+        if (gameState.status === "input") {
+            console.log(btn);
+            gameState.inputSequence.push(btn);
+            setGameState(prev => ({
+                ...prev,
+                inputIndex: prev.inputIndex + 1,
+                status: "checking"
+            }));
+        } else {
+            return;
+        }
+    }
+    //----------------------------------------------------------------------------//
+    useEffect(() => {
+        if (gameState.status === "checking") {
+            console.log("Validating Input")
+            check();
+        }
+    }, [gameState.status]);
+
+    const check = () => {
+        if (gameState.sequence[gameState.inputIndex] === gameState.inputSequence[gameState.inputIndex]) {
+            console.log("Correct")
+            setGameState(prev => ({
+                ...prev,
+                inputIndex: prev.inputIndex + 1,
+                status: "input"
+            }));
+        } else {
+            console.log("Game Over!");
+        }
+    }
+
     //----------------------------------------------------------------------------//   
     //--------------------------------Component Return---------------------------------//
     return (
         <>
             <p id="count-display">{gameState.status === "off" ? "" : `${gameState.count === 0 ? "--" : gameState.count}`}</p>
             <button id="power-btn" onClick={powerBtnPressed}>Power</button>
-            <button id="start-btn" onClick={startBtnPressed}>Start</button>
+            <button id="start-btn" onClick={startRound}>Start</button>
             <button id="strict-btn" onClick={strictBtnPressed}>Strict</button>
 
             <div id="game-btns">
-                <button id="btn1"></button>
-                <button id="btn2"></button>
-                <button id="btn3"></button>
-                <button id="btn4"></button>
+                <button id="btn1" onClick={() => playerInput(1)}></button>
+                <button id="btn2" onClick={() => playerInput(2)}></button>
+                <button id="btn3" onClick={() => playerInput(3)}></button>
+                <button id="btn4" onClick={() => playerInput(4)}></button>
             </div>
 
             <button id="consoleLogState" onClick={() => { console.log(gameStateRef.current) }}>Game State Check</button>
