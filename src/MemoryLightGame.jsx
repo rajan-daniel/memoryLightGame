@@ -34,7 +34,7 @@ export const MemoryLightGame = () => {
             setGameState(prev => ({
                 ...prev,
                 power: true,
-                sequence: Array.from({ length: 20 }, () => Math.floor(Math.random() * 4) + 1),
+                sequence: Array.from({ length: 5 }, () => Math.floor(Math.random() * 4) + 1),
                 status: "on"
             }));
         } else if (gameState.power === true) {
@@ -129,9 +129,20 @@ export const MemoryLightGame = () => {
     }, [gameState.status]);
 
     const check = () => {
+
         if (gameState.sequence[gameState.inputIndex] === gameState.inputSequence[gameState.inputIndex]) {
+
             console.log("Correct")
-            if (gameState.inputSequence.length === gameState.inputsNeeded) {
+            if ((gameState.inputIndex === gameState.sequence.length - 1) && gameState.inputSequence.length === gameState.inputsNeeded) {
+                console.log("You win!")
+                setGameState((prev) => ({
+                    ...initialState,
+                    power: true,
+                    sequence: Array.from({ length: 5 }, () => Math.floor(Math.random() * 4) + 1),
+                    strictMode: prev.strictMode,
+                    status: "on"
+                }));
+            } else if (gameState.inputSequence.length === gameState.inputsNeeded) {
                 console.log("Queueing New Round...")
                 setGameState(prev => ({
                     ...prev,
@@ -149,7 +160,7 @@ export const MemoryLightGame = () => {
                 setGameState({
                     ...initialState,
                     power: true,
-                    sequence: Array.from({ length: 20 }, () => Math.floor(Math.random() * 4) + 1),
+                    sequence: Array.from({ length: 5 }, () => Math.floor(Math.random() * 4) + 1),
                     strictMode: true,
                     status: "on"
                 });
