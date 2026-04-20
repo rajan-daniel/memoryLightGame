@@ -44,6 +44,12 @@ export const MemoryLightGame = () => {
         }
     }
 
+    useEffect(() => {
+        if (gameState.status === "new-round") {
+            startRound();
+        }
+    }, [gameState.status]);
+
     const startRound = () => {
         if (gameState.power === false) {
             return;
@@ -125,13 +131,37 @@ export const MemoryLightGame = () => {
     const check = () => {
         if (gameState.sequence[gameState.inputIndex] === gameState.inputSequence[gameState.inputIndex]) {
             console.log("Correct")
-            setGameState(prev => ({
-                ...prev,
-                inputIndex: prev.inputIndex + 1,
-                status: "input"
-            }));
+            if (gameState.inputSequence.length === gameState.inputsNeeded) {
+                console.log("Queueing New Round...")
+                setGameState(prev => ({
+                    ...prev,
+                    status: "new-round"
+                }));
+            } else {
+                console.log("Continue...")
+                setGameState(prev => ({
+                    ...prev,
+                    status: "input"
+                }));
+            }
         } else {
-            console.log("Game Over!");
+            if (gameState.strictMode === true) {
+                setGameState({
+                    ...initialState,
+                    power: true,
+                    sequence: Array.from({ length: 20 }, () => Math.floor(Math.random() * 4) + 1),
+                    strictMode: true,
+                    status: "on"
+                });
+                console.log("Strict Mode: Resetting");
+            } else {
+                setGameState(prev => ({
+                    ...prev,
+                    inputIndex: -1,
+                    status: "playing"
+                }));
+                console.log("Non strict mode replay sequnce to give another try...")
+            }
         }
     }
 
@@ -141,7 +171,7 @@ export const MemoryLightGame = () => {
         <>
             <p id="count-display">{gameState.status === "off" ? "" : `${gameState.count === 0 ? "--" : gameState.count}`}</p>
             <button id="power-btn" onClick={powerBtnPressed}>Power</button>
-            <button id="start-btn" onClick={startRound}>Start</button>
+            <button id="start-btn" onClick={gameState.status === "on" ? startRound : null}>Start</button>
             <button id="strict-btn" onClick={strictBtnPressed}>Strict</button>
 
             <div id="game-btns">
