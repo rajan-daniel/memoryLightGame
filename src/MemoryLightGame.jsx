@@ -34,7 +34,7 @@ export const MemoryLightGame = () => {
             setGameState(prev => ({
                 ...prev,
                 power: true,
-                sequence: Array.from({ length: 5 }, () => Math.floor(Math.random() * 4) + 1),
+                sequence: Array.from({ length: 20 }, () => Math.floor(Math.random() * 4) + 1),
                 status: "on"
             }));
         } else if (gameState.power === true) {
@@ -110,9 +110,9 @@ export const MemoryLightGame = () => {
     const playerInput = (btn) => {
         if (gameState.status === "input") {
             console.log(btn);
-            gameState.inputSequence.push(btn);
             setGameState(prev => ({
                 ...prev,
+                inputSequence: [...prev.inputSequence, btn],
                 inputIndex: prev.inputIndex + 1,
                 status: "checking"
             }));
@@ -138,7 +138,7 @@ export const MemoryLightGame = () => {
                 setGameState((prev) => ({
                     ...initialState,
                     power: true,
-                    sequence: Array.from({ length: 5 }, () => Math.floor(Math.random() * 4) + 1),
+                    sequence: Array.from({ length: 20 }, () => Math.floor(Math.random() * 4) + 1),
                     strictMode: prev.strictMode,
                     status: "on"
                 }));
@@ -160,7 +160,7 @@ export const MemoryLightGame = () => {
                 setGameState({
                     ...initialState,
                     power: true,
-                    sequence: Array.from({ length: 5 }, () => Math.floor(Math.random() * 4) + 1),
+                    sequence: Array.from({ length: 20 }, () => Math.floor(Math.random() * 4) + 1),
                     strictMode: true,
                     status: "on"
                 });
