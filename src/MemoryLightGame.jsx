@@ -15,13 +15,14 @@ export const MemoryLightGame = () => {
         inputsNeeded: 0,
         inputIndex: -1,
         count: 0,
-        status: "off"
+        status: "off",
     }
 
     const [gameState, setGameState] = useState(initialState);
     const gameStateRef = useRef(null);
     //----------------------------------------------------------------------------//
     //------------------------GAME AUDIO + FLASH BLOCK--------------------------//
+    const inputLocked = useRef(false);
     const [activeButton, setActiveButton] = useState(0);
     useEffect(() => {
         if (activeButton === 1) {
@@ -69,11 +70,15 @@ export const MemoryLightGame = () => {
     };
 
     const flashButton = (num) => {
+        // recieved button by ID //
         const btn = document.getElementById(`btn${num}`);
+        // returns if doesnt find a button with that id //
         if (!btn) return;
 
+        // adding active to button to trigger the flash/ its really just changing brightness //
         btn.classList.add("active");
 
+        // after 100ms remove the active class, thus changing back to original non flashed button//
         setTimeout(() => {
             btn.classList.remove("active");
         }, 100);
@@ -145,18 +150,37 @@ export const MemoryLightGame = () => {
     const sequencePlayback = () => {
         const sequence = gameStateRef.current.sequence;
         const count = gameStateRef.current.count;
+        // create a reference to inputLocked flag
+        inputLocked.current = true;
 
-        for (let i = 0; i < count; i++) {
-            console.log(sequence[i]);
-        }
-
+        // resetting input state just before antimation plays//
         setGameState(prev => ({
             ...prev,
             inputSequence: [],
             inputsNeeded: count,
-            status: "input"
+            inputIndex: -1,
         }));
-    }
+        
+        // animation
+        for (let i = 0; i < count; i++) {
+            setTimeout(() => {
+                console.log(sequence[i]);
+                setActiveButton(sequence[i]);
+            }, i * 600);
+        }
+
+        // delaying the status change to input to prevent spamming buttons from changing status mid animation 
+        // this ensures that it remains locked between steps //
+        setTimeout(() => {
+            inputLocked.current = false;
+
+            setGameState(prev => ({
+                ...prev,
+                status: "input",
+            }));
+            // count * 600 is the last button timing, and the + 100 gives buffer just in case so things update in time //
+        }, count * 600 + 100);
+    };
     //----------------------------------------------------------------------------//
     useEffect(() => {
         if (gameState.status === "input") {
@@ -165,7 +189,7 @@ export const MemoryLightGame = () => {
     }, [gameState.status]);
 
     const playerInput = (btn) => {
-        if (gameState.status === "input") {
+        if (gameState.status === "input" && inputLocked.current === false) {
             setActiveButton(btn);
             console.log(btn);
             setGameState(prev => ({
@@ -193,19 +217,23 @@ export const MemoryLightGame = () => {
             console.log("Correct")
             if ((gameState.inputIndex === gameState.sequence.length - 1) && gameState.inputSequence.length === gameState.inputsNeeded) {
                 console.log("You win!")
-                setGameState((prev) => ({
-                    ...initialState,
-                    power: true,
-                    sequence: Array.from({ length: 20 }, () => Math.floor(Math.random() * 4) + 1),
-                    strictMode: prev.strictMode,
-                    status: "on"
-                }));
+                setTimeout(() => {
+                    setGameState((prev) => ({
+                        ...initialState,
+                        power: true,
+                        sequence: Array.from({ length: 20 }, () => Math.floor(Math.random() * 4) + 1),
+                        strictMode: prev.strictMode,
+                        status: "on"
+                    }));
+                }, 1200);
             } else if (gameState.inputSequence.length === gameState.inputsNeeded) {
                 console.log("Queueing New Round...")
-                setGameState(prev => ({
-                    ...prev,
-                    status: "new-round"
-                }));
+                setTimeout(() => {
+                    setGameState(prev => ({
+                        ...prev,
+                        status: "new-round"
+                    }));
+                }, 800);
             } else {
                 console.log("Continue...")
                 setGameState(prev => ({
@@ -224,11 +252,13 @@ export const MemoryLightGame = () => {
                 });
                 console.log("Strict Mode: Resetting");
             } else {
-                setGameState(prev => ({
-                    ...prev,
-                    inputIndex: -1,
-                    status: "playing"
-                }));
+                setTimeout(() => {
+                    setGameState(prev => ({
+                        ...prev,
+                        inputIndex: -1,
+                        status: "playing"
+                    }));
+                }, 800);
                 console.log("Non strict mode replay sequnce to give another try...")
             }
         }

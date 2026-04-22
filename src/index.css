@@ -131,6 +131,10 @@ button {
   background-color: #005b80;
 }
 
+#game-btns button{
+  transition: all .05s ease;
+}
+
 #game-btns button.active {
     filter: brightness(2);
     transform: scale(1.05);
