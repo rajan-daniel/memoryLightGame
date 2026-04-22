@@ -21,7 +21,64 @@ export const MemoryLightGame = () => {
     const [gameState, setGameState] = useState(initialState);
     const gameStateRef = useRef(null);
     //----------------------------------------------------------------------------//
+    //------------------------GAME AUDIO + FLASH BLOCK--------------------------//
+    const [activeButton, setActiveButton] = useState(0);
+    useEffect(() => {
+        if (activeButton === 1) {
+            playSound(1);
+            flashButton(1);
+        }
+        if (activeButton === 2) {
+            playSound(2);
+            flashButton(2);
+        }
+        if (activeButton === 3) {
+            playSound(3);
+            flashButton(3);
+        }
+        if (activeButton === 4) {
+            playSound(4);
+            flashButton(4);
+        }
+    }, [activeButton]);
 
+    const playSound = (num) => {
+        let sound;
+
+        switch (num) {
+            case 1:
+                sound = new Audio(sound1);
+                break;
+            case 2:
+                sound = new Audio(sound2);
+                break;
+            case 3:
+                sound = new Audio(sound3);
+                break;
+            case 4:
+                sound = new Audio(sound4);
+                break;
+            default:
+                return;
+        }
+
+
+        sound.currentTime = 0;
+        sound.play();
+        setActiveButton(0);
+    };
+
+    const flashButton = (num) => {
+        const btn = document.getElementById(`btn${num}`);
+        if (!btn) return;
+
+        btn.classList.add("active");
+
+        setTimeout(() => {
+            btn.classList.remove("active");
+        }, 100);
+    };
+    //----------------------------------------------------------------------------//
     //--------------------------------Game State Reference for Timing---------------------------------//
     useEffect(() => {
         gameStateRef.current = gameState;
@@ -109,6 +166,7 @@ export const MemoryLightGame = () => {
 
     const playerInput = (btn) => {
         if (gameState.status === "input") {
+            setActiveButton(btn);
             console.log(btn);
             setGameState(prev => ({
                 ...prev,

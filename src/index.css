@@ -130,3 +130,8 @@ button {
 #btn4 {
   background-color: #005b80;
 }
+
+#game-btns button.active {
+    filter: brightness(2);
+    transform: scale(1.05);
+}
