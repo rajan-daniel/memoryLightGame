@@ -267,22 +267,23 @@ export const MemoryLightGame = () => {
     //----------------------------------------------------------------------------//   
     //--------------------------------Component Return---------------------------------//
     return (
-        <>  
-            <div id="display">
-                <p id="count-display">{gameState.status === "off" ? "" : `${gameState.count === 0 ? "--" : gameState.count}`}</p>
+        <>
+            <div id="game">
+                <div id="display">
+                    <p id="count-display">{gameState.status === "off" ? "" : `${gameState.count === 0 ? "--" : gameState.count}`}</p>
+                </div>
+                <div id="game-controls">
+                    <button id="power-btn" onClick={powerBtnPressed}>Power</button>
+                    <button id="start-btn" onClick={gameState.status === "on" ? startRound : null}>Start</button>
+                    <button id="strict-btn" className={gameState.strictMode ? "active-strict" : ""} onClick={strictBtnPressed}>Strict</button>
+                </div>
+                <div id="game-btns">
+                    <button id="btn1" onClick={() => playerInput(1)}></button>
+                    <button id="btn2" onClick={() => playerInput(2)}></button>
+                    <button id="btn3" onClick={() => playerInput(3)}></button>
+                    <button id="btn4" onClick={() => playerInput(4)}></button>
+                </div>
             </div>
-            <div id="game-controls">
-                <button id="power-btn" onClick={powerBtnPressed}>Power</button>
-                <button id="start-btn" onClick={gameState.status === "on" ? startRound : null}>Start</button>
-                <button id="strict-btn" className={gameState.strictMode ? "active-strict" : ""} onClick={strictBtnPressed}>Strict</button>
-            </div>
-            <div id="game-btns">
-                <button id="btn1" onClick={() => playerInput(1)}></button>
-                <button id="btn2" onClick={() => playerInput(2)}></button>
-                <button id="btn3" onClick={() => playerInput(3)}></button>
-                <button id="btn4" onClick={() => playerInput(4)}></button>
-            </div>
-
             <button id="consoleLogState" onClick={() => { console.log(gameStateRef.current) }}>Display Game State in Console</button>
         </>
     );
