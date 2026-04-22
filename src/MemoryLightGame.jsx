@@ -274,7 +274,7 @@ export const MemoryLightGame = () => {
             <div id="game-controls">
                 <button id="power-btn" onClick={powerBtnPressed}>Power</button>
                 <button id="start-btn" onClick={gameState.status === "on" ? startRound : null}>Start</button>
-                <button id="strict-btn" onClick={strictBtnPressed}>Strict</button>
+                <button id="strict-btn" className={gameState.strictMode ? "active-strict" : ""} onClick={strictBtnPressed}>Strict</button>
             </div>
             <div id="game-btns">
                 <button id="btn1" onClick={() => playerInput(1)}></button>
@@ -283,7 +283,7 @@ export const MemoryLightGame = () => {
                 <button id="btn4" onClick={() => playerInput(4)}></button>
             </div>
 
-            <button id="consoleLogState" onClick={() => { console.log(gameStateRef.current) }}>Game State Check</button>
+            <button id="consoleLogState" onClick={() => { console.log(gameStateRef.current) }}>Display Game State in Console</button>
         </>
     );
 }
