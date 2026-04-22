@@ -1,141 +1,104 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
 body {
-  margin: 0;
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #111;
+  color: #fff;
   display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+#count-display {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
 }
 
 button {
-  width: 100px;
-  height: 100px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+#display{
+  border: 2px green solid;
+  display: flex;
+  justify-content: center;
+}
+
+#game-controls {
+  border: 2px green solid;
+  display: flex;
+  justify-content: center;
+
+}
+
+#power-btn,
+#start-btn,
+#strict-btn {
+  margin: 5px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  transition: background 0.2s ease;
+}
+
+#power-btn:hover,
+#start-btn:hover,
+#strict-btn:hover {
+  background-color: #555;
+}
+
+#game-btns {
+  border: 2px green solid;
+  display: grid;
+  grid-template-columns: repeat(2, 120px);
+  grid-template-rows: repeat(2, 120px);
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#game-btns button {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  transition: transform 0.1s ease, filter 0.1s ease;
 }
 
 #btn1 {
-  background-color: #517700;
+  background-color: #cca707;
 }
 
 #btn2 {
-  background-color: #7a002f;
+  background-color: #094a8f;
 }
 
 #btn3 {
-  background-color: #7c7000;
+  background-color: #9f0f17;
 }
 
 #btn4 {
-  background-color: #005b80;
-}
-
-#game-btns button{
-  transition: all .05s ease;
+  background-color: #00a74a;
 }
 
 #game-btns button.active {
-    filter: brightness(2);
-    transform: scale(1.05);
+  filter: brightness(1.8);
+  transform: scale(1.05);
+}
+
+#game-btns button:active {
+  transform: scale(0.95);
+}
+
+footer {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    font-size: 12px;
+    color: #aaa;
+    opacity: 0.7;
+    pointer-events: none;
 }

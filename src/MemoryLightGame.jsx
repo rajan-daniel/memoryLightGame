@@ -160,7 +160,7 @@ export const MemoryLightGame = () => {
             inputsNeeded: count,
             inputIndex: -1,
         }));
-        
+
         // animation
         for (let i = 0; i < count; i++) {
             setTimeout(() => {
@@ -267,12 +267,15 @@ export const MemoryLightGame = () => {
     //----------------------------------------------------------------------------//   
     //--------------------------------Component Return---------------------------------//
     return (
-        <>
-            <p id="count-display">{gameState.status === "off" ? "" : `${gameState.count === 0 ? "--" : gameState.count}`}</p>
-            <button id="power-btn" onClick={powerBtnPressed}>Power</button>
-            <button id="start-btn" onClick={gameState.status === "on" ? startRound : null}>Start</button>
-            <button id="strict-btn" onClick={strictBtnPressed}>Strict</button>
-
+        <>  
+            <div id="display">
+                <p id="count-display">{gameState.status === "off" ? "" : `${gameState.count === 0 ? "--" : gameState.count}`}</p>
+            </div>
+            <div id="game-controls">
+                <button id="power-btn" onClick={powerBtnPressed}>Power</button>
+                <button id="start-btn" onClick={gameState.status === "on" ? startRound : null}>Start</button>
+                <button id="strict-btn" onClick={strictBtnPressed}>Strict</button>
+            </div>
             <div id="game-btns">
                 <button id="btn1" onClick={() => playerInput(1)}></button>
                 <button id="btn2" onClick={() => playerInput(2)}></button>
